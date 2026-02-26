@@ -1505,6 +1505,23 @@ input, select, textarea { font-family: inherit; }
     text-shadow: 0 0 10px rgba(0, 212, 255, 0.8); /* I jep një dritë (glow) */
     text-decoration: underline; /* Shfaqet vija poshtë për t'u dukur si link */
 }
+/* Kjo lejon lëvizjen (scroll) anash vetëm për tabelën në telefon */
+.admin-table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Siguron që tabela të mos ngjishet shumë */
+.admin-table {
+    min-width: 800px; 
+}
+
+@media (max-width: 768px) {
+    .admin-stats {
+        grid-template-columns: 1fr 1fr; /* Statisikat i ndan në 2 kolona në telefon */
+    }
+}
 /* ─── ANIMATIONS ─── */
 @keyframes fadeIn {
   from { opacity: 0; }
