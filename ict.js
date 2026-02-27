@@ -1271,3 +1271,43 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('%c IT Events Hub Kosovo ', 'background:#00d4ff;color:#000;font-weight:bold;padding:4px 8px;border-radius:4px;');
   console.log('%c Keyboard shortcuts: Ctrl+K (search), Ctrl+N (new event) ', 'color:#a855f7;');
 });
+// --- KONFIGURIMI PËRFUNDIMTAR I EMAILJS ---
+
+// 1. Inicializimi me Public Key-in tënd
+emailjs.init("sLcObY_Fg6HrOOkWX");
+
+// 2. Kapja e dërgimit të formës
+document.getElementById('submitEventForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Ndalon rifreskimin e faqes që të kryhet dërgimi
+
+    // Shfaq një mesazh që dërgimi po procesohet (opsionale)
+    const submitBtn = document.getElementById('submitBtn');
+    if(submitBtn) submitBtn.innerText = "Duke u dërguar...";
+
+    // 3. Mbledhja e të dhënave nga fushat e formës
+    const eventParams = {
+        event_name: document.getElementById('eventName').value,
+        event_city: document.getElementById('eventCity').value,
+        event_date: document.getElementById('eventDate').value,
+        event_organizer: document.getElementById('eventOrganizer').value || "I paemërtuar",
+        event_desc: document.getElementById('eventDesc').value
+    };
+
+    // 4. Dërgimi i email-it njoftues
+    // Service ID: service_wonix4j | Template ID: template_f3qtgii
+    emailjs.send("service_wonix4j", "template_f3qtgii", eventParams)
+        .then(function(response) {
+            console.log('Sukses!', response.status, response.text);
+            alert("Njoftimi u dërgua me sukses! Eventi do të shfaqet pasi të aprovohet nga Ensar Gashi.");
+            
+            // Këtu vazhdon logjika jote për ruajtjen në LocalStorage
+            // Nëse dëshiron që forma të pastrohet:
+            document.getElementById('submitEventForm').reset();
+            if(submitBtn) submitBtn.innerText = "🚀 Publiko Eventin";
+            
+        }, function(error) {
+            console.log('Gabim gjatë dërgimit:', error);
+            alert("Ndodhi një gabim teknik. Ju lutem provoni përsëri.");
+            if(submitBtn) submitBtn.innerText = "🚀 Publiko Eventin";
+        });
+});
