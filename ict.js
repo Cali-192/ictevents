@@ -8,221 +8,27 @@
 const ADMIN_PASSCODE = '1973';  
 
 /* ─── INITIAL EVENT DATA ─── */
-const SEED_EVENTS = [
-  {
-    id: 1,
-    title: 'Kosovo Developer Summit 2025',
-    date: '2025-03-15',
-    city: 'Prishtinë',
-    venue: 'Innovation Centre Kosovo',
-    type: 'Konferencë',
-    category: 'Dev',
-    description: 'Konferenca më e madhe e zhvilluesve softuerik në Kosovë. Dy ditë me folës ndërkombëtarë, workshope praktike dhe mundësi rrjetëzimi.',
-    link: 'https://example.com/kds2025',
-    organizer: 'Kosovo Tech Community',
-    featured: true,
-    status: 'approved',
-    createdAt: new Date('2025-01-10').toISOString(),
-  },
-  {
-    id: 2,
-    title: 'CyberSec Kosovo Conference',
-    date: '2025-03-22',
-    city: 'Prishtinë',
-    venue: 'Hotel Sirius',
-    type: 'Konferencë',
-    category: 'Cyber',
-    description: 'Konferenca vjetore e sigurisë kibernetike. Ekspertë nga e gjithë rajoni diskutojnë kërcënimet e fundit dhe strategjitë e mbrojtjes.',
-    link: 'https://example.com/cybersec',
-    organizer: 'CERT Kosovo',
-    featured: true,
-    status: 'approved',
-    createdAt: new Date('2025-01-15').toISOString(),
-  },
-  {
-    id: 3,
-    title: 'UX/UI Design Meetup Prizren',
-    date: '2025-03-28',
-    city: 'Prizren',
-    venue: 'Prizren Tech Hub',
-    type: 'Meetup',
-    category: 'Design',
-    description: 'Takimi mujor i dizajnerëve UX/UI të Prizrenit. Prezantime, feedback sessions dhe networking mbi dizajnin e produkteve dixhitale.',
-    link: 'https://example.com/ux-prizren',
-    organizer: 'Prizren Designers',
-    featured: false,
-    status: 'approved',
-    createdAt: new Date('2025-01-20').toISOString(),
-  },
-  {
-    id: 4,
-    title: 'AI & Machine Learning Workshop',
-    date: '2025-04-05',
-    city: 'Prishtinë',
-    venue: 'UP Faculty of Computer Science',
-    type: 'Workshop',
-    category: 'AI',
-    description: 'Workshop praktik mbi inteligjencën artificiale dhe machine learning. Mëso të ndërtosh modele AI me Python dhe TensorFlow.',
-    link: 'https://example.com/ai-workshop',
-    organizer: 'AI Kosovo',
-    featured: false,
-    status: 'approved',
-    createdAt: new Date('2025-01-25').toISOString(),
-  },
-  {
-    id: 5,
-    title: 'Peja Tech Meetup #12',
-    date: '2025-04-10',
-    city: 'Pejë',
-    venue: 'Peja Innovation Hub',
-    type: 'Meetup',
-    category: 'Dev',
-    description: 'Takimi i dymbëdhjetë i komunitetit tech të Pejës. Prezantime nga zhvilluesit lokalë dhe diskutime mbi teknologjitë e reja.',
-    link: 'https://example.com/peja-tech',
-    organizer: 'Peja Tech Community',
-    featured: false,
-    status: 'approved',
-    createdAt: new Date('2025-02-01').toISOString(),
-  },
-  {
-    id: 6,
-    title: 'Kosovo Startup Hackathon',
-    date: '2025-04-18',
-    city: 'Prishtinë',
-    venue: 'Prishtina Innovation Hub',
-    type: 'Hackathon',
-    category: 'Business',
-    description: '48 orë inovacion! Ndërto produktin tënd të parë startup me mentorim nga sipërmarrës të suksesshëm. Çmime deri në 5,000€.',
-    link: 'https://example.com/hackathon',
-    organizer: 'Kosovo Startup Foundation',
-    featured: true,
-    status: 'approved',
-    createdAt: new Date('2025-02-05').toISOString(),
-  },
-  {
-    id: 7,
-    title: 'Web Development Bootcamp',
-    date: '2025-04-25',
-    city: 'Gjakovë',
-    venue: 'Gjakova Tech Center',
-    type: 'Workshop',
-    category: 'Dev',
-    description: 'Bootcamp intensiv 3-ditor për zhvillim web. Mëso HTML, CSS, JavaScript dhe React nga zero deri në nivel profesional.',
-    link: 'https://example.com/webdev-bootcamp',
-    organizer: 'CodeKosova',
-    featured: false,
-    status: 'approved',
-    createdAt: new Date('2025-02-10').toISOString(),
-  },
-  {
-    id: 8,
-    title: 'Digital Marketing & Tech Summit',
-    date: '2025-05-02',
-    city: 'Mitrovicë',
-    venue: 'Mitrovica Business Center',
-    type: 'Konferencë',
-    category: 'Business',
-    description: 'Konferenca e parë e marketingut dixhital dhe teknologjisë në Mitrovicë. Folës nga kompani kryesore të rajonit.',
-    link: 'https://example.com/digital-summit',
-    organizer: 'North Kosovo Business Hub',
-    featured: false,
-    status: 'approved',
-    createdAt: new Date('2025-02-15').toISOString(),
-  },
-  {
-    id: 9,
-    title: 'Ferizaj Developers Meetup',
-    date: '2025-05-08',
-    city: 'Ferizaj',
-    venue: 'Ferizaj Youth Center',
-    type: 'Meetup',
-    category: 'Dev',
-    description: 'Takimi i parë i zhvilluesve të Ferizajt. Prezantime, code reviews dhe networking me profesionistë të IT-së.',
-    link: 'https://example.com/ferizaj-dev',
-    organizer: 'Ferizaj Tech',
-    featured: false,
-    status: 'approved',
-    createdAt: new Date('2025-02-20').toISOString(),
-  },
-  {
-    id: 10,
-    title: 'Figma & Design Systems Workshop',
-    date: '2025-05-15',
-    city: 'Prishtinë',
-    venue: 'Creative Hub Prishtina',
-    type: 'Workshop',
-    category: 'Design',
-    description: 'Workshop avancuar mbi Figma dhe ndërtimin e design systems. Mëso të krijoni komponente të ripërdorshme dhe design tokens.',
-    link: 'https://example.com/figma-workshop',
-    organizer: 'Kosovo UX Guild',
-    featured: false,
-    status: 'approved',
-    createdAt: new Date('2025-02-25').toISOString(),
-  },
-  {
-    id: 11,
-    title: 'Ethical Hacking & Penetration Testing',
-    date: '2025-05-22',
-    city: 'Prizren',
-    venue: 'Prizren University',
-    type: 'Workshop',
-    category: 'Cyber',
-    description: 'Workshop praktik mbi ethical hacking dhe penetration testing. Mëso teknikat e sulmit dhe mbrojtjes në ambiente të kontrolluara.',
-    link: 'https://example.com/ethical-hacking',
-    organizer: 'CyberKosova',
-    featured: false,
-    status: 'approved',
-    createdAt: new Date('2025-03-01').toISOString(),
-  },
-  {
-    id: 12,
-    title: 'Kosovo AI Conference 2025',
-    date: '2025-06-10',
-    city: 'Prishtinë',
-    venue: 'Prishtina International Hotel',
-    type: 'Konferencë',
-    category: 'AI',
-    description: 'Konferenca e parë ndërkombëtare e AI-t në Kosovë. Folës nga Google, Microsoft dhe startupet kryesore të AI-t në Europë.',
-    link: 'https://example.com/ai-conf',
-    organizer: 'Kosovo AI Society',
-    featured: true,
-    status: 'approved',
-    createdAt: new Date('2025-03-05').toISOString(),
-  },
-];
+/* ─── FIREBASE & EMAILJS CONFIGURATION ─── */
+const firebaseConfig = {
+  apiKey: "AIzaSyDvbEPPmXSzel5RxdElWG-dPLalCI5ZsfY",
+  authDomain: "it-events-kosovo.firebaseapp.com",
+  databaseURL: "https://it-events-kosovo-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "it-events-kosovo",
+  storageBucket: "it-events-kosovo.firebasestorage.app",
+  messagingSenderId: "184421696954",
+  appId: "1:184421696954:web:d1c1e4db3c00992bfd8983"
+};
 
-/* ─── LOCALSTORAGE HELPERS ─── */
-const LS_KEY_EVENTS  = 'ict_events';
-const LS_KEY_NEXT_ID = 'ict_next_id';
+// Inicializimi i Firebase (Compat version)
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
-function loadFromStorage() {
-  try {
-    const raw = localStorage.getItem(LS_KEY_EVENTS);
-    if (raw) return JSON.parse(raw);
-  } catch (e) { /* ignore */ }
-  return null;
-}
-
-function saveToStorage() {
-  try {
-    localStorage.setItem(LS_KEY_EVENTS,  JSON.stringify(state.events));
-    localStorage.setItem(LS_KEY_NEXT_ID, String(state.nextId));
-  } catch (e) { /* ignore */ }
-}
-
-function loadNextId() {
-  try {
-    const raw = localStorage.getItem(LS_KEY_NEXT_ID);
-    if (raw) return parseInt(raw, 10);
-  } catch (e) { /* ignore */ }
-  return SEED_EVENTS.length + 1;
-}
+// Inicializimi i EmailJS
+emailjs.init("sLcObY_Fg6HrOOkWX");
 
 /* ─── APP STATE ─── */
-const storedEvents = loadFromStorage();
 const state = {
-  events: storedEvents ? storedEvents : [...SEED_EVENTS],
-  nextId: loadNextId(),
+  events: [], 
   filters: {
     type: 'all',
     city: 'all',
@@ -234,7 +40,46 @@ const state = {
   adminAuthenticated: false,
 };
 
-/* ─── UTILITY FUNCTIONS ─── */
+/* ─── FIREBASE REALTIME LISTENER ─── */
+// Ky funksion dëgjon Cloud-in dhe përditëson çdo pajisje në kohë reale
+database.ref('events').on('value', (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    state.events = Object.keys(data).map(key => ({
+      id: key, // Kjo është ID unike e Firebase (psh: -O5kL...)
+      ...data[key]
+    }));
+  } else {
+    state.events = [];
+  }
+  
+  // Rifresko pamjen e faqes
+  if (typeof renderEvents === 'function') renderEvents();
+  if (typeof renderAdminTable === 'function') renderAdminTable();
+  if (typeof updateStats === 'function') updateStats();
+});
+
+/* ─── CLOUD ACTIONS (Shtohen këtu) ─── */
+
+// Funksioni për të aprovuar eventin në Cloud
+function approveEvent(id) {
+  database.ref('events/' + id).update({
+    status: 'approved'
+  }).then(() => {
+    showToast('✅ Eventi u aprovua me sukses!', 'success');
+  });
+}
+
+// Funksioni për të fshirë eventin nga Cloud
+function deleteEvent(id) {
+  if (confirm('A jeni i sigurt që dëshironi ta fshini këtë event?')) {
+    database.ref('events/' + id).remove().then(() => {
+      showToast('🗑️ Eventi u fshi nga sistemi.', 'info');
+    });
+  }
+}
+
+/* ─── UTILITY FUNCTIONS (Të ruajtura saktësisht) ─── */
 function formatDate(dateStr) {
   if (!dateStr) return 'TBD';
   const d = new Date(dateStr + 'T00:00:00');
@@ -269,7 +114,6 @@ function getDaysLabel(dateStr) {
   if (days === 1) return 'Nesër!';
   return `${days} ditë`;
 }
-
 function getCategoryIcon(cat) {
   const icons = {
     Dev: '💻',
@@ -760,21 +604,48 @@ function capitalize(str) {
 }
 
 function addEvent(data) {
+  // 1. Përgatitja e objektit për Cloud (pa ID-në e vjetër state.nextId++)
   const newEvent = {
-    id: state.nextId++,
-    ...data,
+    title: data.title,
+    date: data.date,
+    city: data.city,
+    type: data.type,
+    category: data.category,
+    venue: data.venue || "",
+    description: data.description,
+    link: data.link || "",
+    organizer: data.organizer || "I paemërtuar",
     featured: false,
-    status: 'pending',
-    createdAt: new Date().toISOString(),
+    status: 'pending', // Do të presë aprovimin tënd
+    createdAt: new Date().toISOString()
   };
-  state.events.unshift(newEvent);
-  saveToStorage();
-  renderEvents();
-  renderAdminTable();
-  updateAdminStats();
-  return newEvent;
-}
 
+  // 2. Ruajtja në Firebase
+  // .push() krijon automatikisht një ID unike në Cloud
+  const newEventRef = database.ref('events').push();
+  
+  return newEventRef.set(newEvent)
+    .then(() => {
+      console.log("Eventi u ruajt në Firebase!");
+
+      // 3. Dërgimi i Email-it njoftues te Ensar Gashi
+      return emailjs.send("service_wonix4j", "template_f3qtgii", {
+        event_name: newEvent.title,
+        event_city: newEvent.city,
+        event_date: newEvent.date,
+        event_organizer: newEvent.organizer,
+        event_desc: newEvent.description
+      });
+    })
+    .then((response) => {
+      console.log("Emaili u dërgua me sukses!", response.status);
+      showToast('✅ Sukses! Eventi do të shfaqet pasi të aprovohet.', 'success');
+    })
+    .catch((error) => {
+      console.error("Gabim gjatë procesit:", error);
+      showToast('❌ Ndodhi një gabim teknik.', 'error');
+    });
+}
 function resetForm(formId) {
   const form = document.getElementById(formId);
   if (form) {
@@ -1075,6 +946,7 @@ function openAdminPanel() {
   updateAdminStats();
 }
 
+/* ─── ADMIN PANEL RENDERING ─── */
 function renderAdminTable() {
   const tbody = document.getElementById('adminTableBody');
   if (!tbody) return;
@@ -1086,7 +958,7 @@ function renderAdminTable() {
 
   tbody.innerHTML = state.events.map(ev => `
     <tr>
-      <td style="font-family:var(--font-mono);color:var(--text-muted);font-size:0.75rem;">#${ev.id}</td>
+      <td style="font-family:var(--font-mono);color:var(--text-muted);font-size:0.75rem;">#${ev.id.substring(0, 6)}...</td>
       <td style="color:var(--text-primary);font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${sanitize(ev.title)}">${sanitize(ev.title)}</td>
       <td>${formatDateShort(ev.date)}</td>
       <td>${sanitize(ev.city)}</td>
@@ -1096,10 +968,10 @@ function renderAdminTable() {
       <td>
         <div class="admin-actions">
           ${ev.status !== 'approved'
-            ? `<button class="admin-btn admin-btn-approve" onclick="adminAction(${ev.id},'approve')">✓ Aprovo</button>`
-            : `<button class="admin-btn admin-btn-reject" onclick="adminAction(${ev.id},'reject')">✗ Refuzo</button>`
+            ? `<button class="admin-btn admin-btn-approve" onclick="adminAction('${ev.id}','approve')">✓ Aprovo</button>`
+            : `<button class="admin-btn admin-btn-reject" onclick="adminAction('${ev.id}','reject')">✗ Refuzo</button>`
           }
-          <button class="admin-btn admin-btn-delete" onclick="adminAction(${ev.id},'delete')">🗑</button>
+          <button class="admin-btn admin-btn-delete" onclick="adminAction('${ev.id}','delete')">🗑</button>
         </div>
       </td>
     </tr>
@@ -1111,26 +983,35 @@ function getStatusLabel(status) {
   return labels[status] || status;
 }
 
+/* ─── ADMIN ACTIONS (CONNECTED TO FIREBASE) ─── */
 window.adminAction = function(id, action) {
-  const idx = state.events.findIndex(e => e.id === id);
-  if (idx === -1) return;
+  // Gjejmë eventin në state-in lokal për të marrë titullin (për toast)
+  const ev = state.events.find(e => e.id === id);
+  if (!ev) return;
+
+  const eventRef = database.ref('events/' + id);
 
   if (action === 'approve') {
-    state.events[idx].status = 'approved';
-    showToast(`✅ Eventi "${state.events[idx].title}" u aprovua.`, 'success');
-  } else if (action === 'reject') {
-    state.events[idx].status = 'rejected';
-    showToast(`❌ Eventi "${state.events[idx].title}" u refuzua.`, 'error');
-  } else if (action === 'delete') {
-    const title = state.events[idx].title;
-    state.events.splice(idx, 1);
-    showToast(`🗑️ Eventi "${title}" u fshi.`, 'info');
-  }
+    eventRef.update({ status: 'approved' })
+      .then(() => showToast(`✅ Eventi "${ev.title}" u aprovua.`, 'success'))
+      .catch(err => console.error("Gabim:", err));
 
-  saveToStorage();
-  renderAdminTable();
-  updateAdminStats();
-  renderEvents();
+  } else if (action === 'reject') {
+    eventRef.update({ status: 'rejected' })
+      .then(() => showToast(`❌ Eventi "${ev.title}" u refuzua.`, 'error'))
+      .catch(err => console.error("Gabim:", err));
+
+  } else if (action === 'delete') {
+    if (confirm(`A jeni i sigurt që dëshironi ta fshini "${ev.title}"?`)) {
+      eventRef.remove()
+        .then(() => showToast(`🗑️ Eventi "${ev.title}" u fshi.`, 'info'))
+        .catch(err => console.error("Gabim:", err));
+    }
+  }
+  
+  // Shënim: Nuk kemi nevojë për renderAdminTable() apo saveToStorage() këtu!
+  // Pse? Sepse database.ref('events').on('value', ...) që kemi bërë më lart 
+  // do ta detektojë ndryshimin në Cloud dhe do ta rifreskojë tabelën automatikisht.
 };
 
 function updateAdminStats() {
