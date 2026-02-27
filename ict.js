@@ -167,6 +167,7 @@ function getFilteredEvents() {
 function renderCard(ev) {
   const days = getDaysUntil(ev.date);
   const daysLabel = getDaysLabel(ev.date);
+  // Përmirësim: Kontrollojmë datën saktë për statusin "Përfundoi"
   const isPast = days !== null && days < 0;
 
   const catClass = `badge-cat-${ev.category}`;
@@ -215,7 +216,9 @@ function renderCard(ev) {
           <span>Organizatori: </span>
           <strong>${sanitize(ev.organizer || 'N/A')}</strong>
         </div>
-        <button class="btn-register" data-id="${ev.id}" ${isPast ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>
+        <button class="btn-register" 
+                data-id="${ev.id}" 
+                ${isPast ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>
           ${isPast ? 'Përfundoi' : 'Regjistrohu →'}
         </button>
       </div>
@@ -272,16 +275,20 @@ function renderEvents() {
 
   // Attach register button handlers
   grid.querySelectorAll('.btn-register:not([disabled])').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.onclick = (e) => {
       e.stopPropagation();
-      const id = parseInt(btn.dataset.id);
+      
+      // HIQET parseInt sepse ID e Firebase eshte String (tekst)
+      const id = btn.dataset.id; 
       const ev = state.events.find(e => e.id === id);
+      
       if (ev && ev.link) {
-        window.open(ev.link, '_blank', 'noopener');
+        // Sigurohemi që linku të hapet saktë
+        window.open(ev.link, '_blank', 'noopener,noreferrer');
       } else {
         showToast('Linku i regjistrimit nuk është disponibël.', 'info');
       }
-    });
+    };
   });
 }
 
@@ -604,7 +611,13 @@ function capitalize(str) {
 }
 
 function addEvent(data) {
-  // 1. Përgatitja e objektit për Cloud (pa ID-në e vjetër state.nextId++)
+  // Rregullimi i linkut: Nëse përdoruesi harron http/https, ia shtojmë ne
+  let formattedLink = data.link ? data.link.trim() : "";
+  if (formattedLink && !/^https?:\/\//i.test(formattedLink)) {
+    formattedLink = 'https://' + formattedLink;
+  }
+
+  // 1. Përgatitja e objektit për Cloud
   const newEvent = {
     title: data.title,
     date: data.date,
@@ -613,7 +626,7 @@ function addEvent(data) {
     category: data.category,
     venue: data.venue || "",
     description: data.description,
-    link: data.link || "",
+    link: formattedLink,
     organizer: data.organizer || "I paemërtuar",
     featured: false,
     status: 'pending', // Do të presë aprovimin tënd
@@ -621,31 +634,42 @@ function addEvent(data) {
   };
 
   // 2. Ruajtja në Firebase
-  // .push() krijon automatikisht një ID unike në Cloud
   const newEventRef = database.ref('events').push();
   
   return newEventRef.set(newEvent)
     .then(() => {
       console.log("Eventi u ruajt në Firebase!");
 
-      // 3. Dërgimi i Email-it njoftues te Ensar Gashi
+      // 3. Dërgimi i Email-it njoftues
       return emailjs.send("service_wonix4j", "template_f3qtgii", {
         event_name: newEvent.title,
         event_city: newEvent.city,
         event_date: newEvent.date,
         event_organizer: newEvent.organizer,
-        event_desc: newEvent.description
+        event_desc: newEvent.description,
+        event_link: newEvent.link
       });
     })
     .then((response) => {
       console.log("Emaili u dërgua me sukses!", response.status);
-      showToast('✅ Sukses! Eventi do të shfaqet pasi të aprovohet.', 'success');
+      if (typeof showToast === 'function') {
+        showToast('✅ Sukses! Eventi do të shfaqet pasi të aprovohet.', 'success');
+      } else {
+        alert('✅ Sukses! Eventi do të shfaqet pasi të aprovohet.');
+      }
+      // Reseto formën pas suksesit
+      resetForm('addEventForm'); // Sigurohu që ID e formës të jetë e saktë
     })
     .catch((error) => {
       console.error("Gabim gjatë procesit:", error);
-      showToast('❌ Ndodhi një gabim teknik.', 'error');
+      if (typeof showToast === 'function') {
+        showToast('❌ Ndodhi një gabim teknik.', 'error');
+      } else {
+        alert('❌ Ndodhi një gabim teknik.');
+      }
     });
 }
+
 function resetForm(formId) {
   const form = document.getElementById(formId);
   if (form) {
@@ -654,7 +678,6 @@ function resetForm(formId) {
     form.querySelectorAll('.form-error').forEach(el => el.textContent = '');
   }
 }
-
 /* ─── SECTION FORM (Forma poshtë në faqe) ─── */
 function initSectionForm() {
   const form = document.getElementById('submitEventForm');
@@ -1191,4 +1214,34 @@ document.getElementById('submitEventForm').addEventListener('submit', function(e
             alert("Ndodhi një gabim teknik. Ju lutem provoni përsëri.");
             if(submitBtn) submitBtn.innerText = "🚀 Publiko Eventin";
         });
+});
+
+// SHTOJE KËTË NË FUND FARE TË ict.js
+document.addEventListener('click', function(e) {
+    // Kontrollojmë nëse klikimi u bë mbi butonin Regjistrohu
+    if (e.target && e.target.classList.contains('btn-register')) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const eventId = e.target.getAttribute('data-id');
+        
+        // Kërkojmë eventin në listen globale 'state.events'
+        const ev = state.events.find(item => item.id === eventId);
+
+        if (ev && ev.link) {
+            let url = ev.link.trim();
+            // Shtojmë https:// nëse mungon
+            if (!/^https?:\/\//i.test(url)) {
+                url = 'https://' + url;
+            }
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } else {
+            // Nëse nuk ka link, përdorim funksionin tënd showToast
+            if (typeof showToast === 'function') {
+                showToast('Linku i regjistrimit nuk është i disponueshëm.', 'info');
+            } else {
+                alert('Linku i regjistrimit nuk është i disponueshëm.');
+            }
+        }
+    }
 });
