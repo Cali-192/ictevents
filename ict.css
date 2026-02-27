@@ -786,6 +786,9 @@ input, select, textarea { font-family: inherit; }
   transition: transform var(--t-fast), box-shadow var(--t-fast);
   white-space: nowrap;
   flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  pointer-events: auto !important;
 }
 
 .btn-register:hover {
